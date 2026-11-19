@@ -5,7 +5,7 @@
 | Name | Roll No. | Part |
 |---|---|---|
 | | | Problem 1 (lagrange.py) |
-| | | Problem 2 (newton_differences.py) |
+|Nayab mahmood |33427 | Problem 2 (newton_differences.py) |
 | | | Problem 3 (hermite.py) |
 | | | Problem 4 (interpolate.py), Applications A and B |
 | | | Applications C and D, report |
@@ -49,32 +49,36 @@ With equally spaced nodes, the error grows near the ends of the interval as n in
 
 ## Problem 2 - Newton Forward and Backward Differences
 
-Difference table for e^x:
+Difference table for \(e^x\) with spacing \(h = 0.2\).
 
-```
-(paste output here)
+```text
+       x         y  Delta^1 y  Delta^2 y  Delta^3 y  Delta^4 y  Delta^5 y
+0.000000  1.000000   0.221403   0.049019   0.010853   0.002403   0.000532
+0.200000  1.221403   0.270422   0.059872   0.013256   0.002935
+0.400000  1.491825   0.330294   0.073128   0.016191
+0.600000  1.822119   0.403422   0.089319
+0.800000  2.225541   0.492741
+1.000000  2.718282
 ```
 
 **(i) Accuracy vs. degree**
 
-| Degree | e^0.05 (forward) | True error | Error estimate | e^0.95 (backward) | True error | Error estimate |
-|---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
-| 4 | | | | | | |
+| Degree | \(e^{0.05}\) (forward) | True error | Error estimate | \(e^{0.95}\) (backward) | True error | Error estimate |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 1.0553506895 | 4.079593e-03 | 4.595548e-03 | 2.5950966035 | 9.386944e-03 | 8.373635e-03 |
+| 2 | 1.0507551413 | 5.159551e-04 | 5.935225e-04 | 2.5867229686 | 1.013309e-03 | 8.854314e-04 |
+| 3 | 1.0513486637 | 7.756737e-05 | 9.034266e-05 | 2.5858375372 | 1.278778e-04 | 1.103448e-04 |
+| 4 | 1.0512583211 | 1.277530e-05 | 1.500159e-05 | 2.5857271924 | 1.753306e-05 | 1.500159e-05 |
 
-The error estimate is the first term that was left out. For smooth data like e^x the differences shrink fast, so this estimate is close to the true error.
+I calculated the true error as the absolute difference between the interpolated value and \(e^x\). The error estimate is the magnitude of the first omitted term. The higher-order differences shrink quickly for these data, so the estimate is close to the true error. It slightly overestimates the forward errors and slightly underestimates the backward errors.
 
 **(ii) Same polynomial, two formulas**
 
-All 6 nodes, max difference between the two formulas: ____
+I compared both formulas on 200 equally spaced points in \([0,1]\).
 
-They match because both formulas build the same unique degree-5 polynomial through the same 6 points, just written differently. Any difference is round-off.
+**All 6 nodes (degree 5)** — The maximum difference was **1.332268e-15**. Both formulas represent the same unique polynomial of degree at most five through the six data points. The small difference comes from floating-point rounding.
 
-With degree = 2, max difference: ____
-
-They differ now because each formula uses a different set of 3 nodes: forward uses nodes after the point, backward uses nodes before it. So they build different quadratics.
+**Degree 2** — The maximum difference was **2.023383e-03**. Each formula uses three consecutive nodes. The forward formula starts at its base node, and the backward formula ends at its base node. The two formulas can therefore use different sets of three nodes at the same evaluation point, giving different local quadratics.
 
 ---
 

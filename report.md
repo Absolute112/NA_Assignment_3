@@ -6,7 +6,7 @@
 |---|---|---|
 | | | Problem 1 (lagrange.py) |
 |Nayab mahmood |33427 | Problem 2 (newton_differences.py) |
-| | | Problem 3 (hermite.py) |
+|Emaan Shahbaz |31777 | Problem 3 (hermite.py) |
 | | | Problem 4 (interpolate.py), Applications A and B |
 | | | Applications C and D, report |
 
@@ -87,32 +87,32 @@ I compared both formulas on 200 equally spaced points in \([0,1]\).
 **(i) Is derivative information worth it?**
 
 | Method | Points used | Degree | Error at x = 0.25 | Max error |
-|---|---|---|---|---|
-| Lagrange | 3 | 2 | | |
-| Hermite | 3 + derivatives | 5 | | |
-| Lagrange | 6 | 5 | | |
+|---|---|---:|---:|---:|
+| Lagrange | 3 | 2 | 1.226969e-02 | 1.442066e-02 |
+| Hermite | 3 + derivatives | 5 | 4.901155e-06 | 5.577330e-06 |
+| Lagrange | 6 | 5 | 6.021960e-07 | 2.655070e-06 |
 
-Fewest measurement locations: Lagrange with 3 nodes and Hermite (both use 3 points).
+**Fewest measurement locations.** Three-node Lagrange and Hermite both use 3 points.
 
-Most accurate: ____
+**Most accurate.** Lagrange with 6 points had the lowest error at x = 0.25 and on the grid.
 
-Why: Hermite uses the derivatives to get degree 5 from only 3 points, so its error is divided by 6! instead of 3!. It also has squared (x - x_i) terms, which are small near the nodes.
+**Why.** Hermite uses the derivatives to get a degree 5 polynomial from just 3 points. Its error formula has 6! in the denominator, while three-point Lagrange has 3!. Hermite also has squared \((x-x_i)\) terms, which make the error small near the nodes. Six-point Lagrange also has 6! in the denominator, and its six node factors gave a smaller error in this example.
 
 **(ii) Interpolation conditions**
 
-Max error in H(x_i) vs f(x_i): ____
+Max error in \(H(x_i)\) vs. \(f(x_i)\) = **0**
 
-Max error in H'(x_i) vs f'(x_i): ____
+Max error in \(H'(x_i)\) vs. \(f'(x_i)\) = **0**
+
+So Hermite matched both the function value and the slope at all three nodes.
 
 **(iii) Exactness**
 
-Max error for x^5 - 3x^2 + 1: ____
+Max error for \(x^5-3x^2+1\) = **6.661338e-16** (rounding error)
 
-Max error for x^6: ____
+Max error for \(x^6\) = **2.314806e-03**
 
-Why: Hermite with 3 nodes builds a polynomial of degree 5 or less, and its error depends on the 6th derivative. For x^5 - 3x^2 + 1 that is 0, so the result is exact. For x^6 it is 720, so it isn't exact.
-
----
+**Why.** Hermite with 3 nodes can reproduce any polynomial of degree 5 or less. The sixth derivative of \(x^5-3x^2+1\) is zero, so the result is exact. For \(x^6\), the sixth derivative is 720, so there is still an error between the nodes.
 
 ## Problem 4 - Choosing the Method
 

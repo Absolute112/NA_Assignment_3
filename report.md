@@ -7,8 +7,8 @@
 | Abdul Ahad | 33478 | Problem 1 (lagrange.py), report |
 | Nayab Mahmood | 33427 | Problem 2 (newton_differences.py), report |
 | Emaan Shahbaz | 31777 | Problem 3 (hermite.py), report |
-| Arham | 33459| Problem 4 (interpolate.py), report |
-|Rufile |33465 | Problem 5 Applications A, B, C and D, report |
+| | | Problem 4 (interpolate.py), report |
+| | | Problem 5 Applications A, B, C and D, report |
 
 Each file can be run on its own with `python <filename>.py` and it prints the test cases for that problem. We only used numpy, matplotlib and sympy. Also everyy memeber played a part in the report, specifically corresponding to their problems they answered.
 
@@ -241,4 +241,13 @@ The error bound needs a bound on the derivative, which usually isn't known for r
 
 | Tool used | Part of assignment | What it helped with | % AI-assisted |
 |---|---|---|---|
-| chatgpt | start | understanding question and learning python concepts | |
+| Claude| report | Building the skeleton of the report | 60% |
+| Claude| report | Formatting the report to make it look cleaner | 40% |
+| Claude| lagrange | explained how Lagrange basis polynomials work, and why the sum of L_k(x) is 1 | 18% |
+| Claude| lagrange | debugging errors and understanding why somee warnings were popping up | 10% |
+| Claude| newton differences | understanding forward vs backward differences, and what s and t mean | 10% |
+| Claude| newton differences | understadning the base-node rule | 20% |
+| Claude| hermite | understanding doubled nodes | 20% |
+| Claude| hermite | understanding the exact H′ step and the results using the two error formulas | 20% |
+| Claude| applications | understanding how to make the figures | 30% |
+| Claude| interpolate | understanding sorting, extrapolation detection and the spacing tolerance | 30% |

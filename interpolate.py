@@ -1,81 +1,92 @@
+import warnings
+
 import numpy as np
+
 from lagrange import validate_nodes, lagrange_interpolate
-from newton_diff import _float_array, check_equal_spacing, newton_forward, newton_backward
+from newton_differences import check_equal_spacing, newton_forward, newton_backward
 from hermite import hermite_interpolate
 
 
 def choose_method(x_nodes, y_nodes, x_eval, dydx_nodes=None, spacing_rtol=1e-9):
-    x = validate_nodes(x_nodes)
-    y = _float_array(y_nodes, "y_nodes")
-    if x.ndim != 1 or x.size != y.size:
-        raise ValueError("x_nodes and y_nodes must be 1-D arrays of the same length")
+    """Decide which interpolation method to use for this data.
 
-    eval_arr = _float_array(x_eval, "x_eval", allow_scalar=True)
-    xe = float(np.mean(eval_arr))
-    xs = np.sort(x)
-    n = xs.size - 1
-    extrapolating = bool(np.any((eval_arr < xs[0]) | (eval_arr > xs[-1])))
+    Hermite if derivatives are given. Otherwise, if the nodes are equally
+    spaced, Newton forward when x_eval is in the first half of the table and
+    Newton backward when it's in the second half. Otherwise Lagrange.
 
+    Parameters: x_nodes, y_nodes are the data, x_eval is a float or array,
+        dydx_nodes is the derivative data or None, spacing_rtol is the
+        tolerance for counting the nodes as equally spaced.
+    Returns: dict with method, reason, equally_spaced, h, extrapolating.
+    Raises: TypeError for non-numbers, ValueError for bad or repeated nodes
+        or if x and y have different lengths.
+    Example: choose_method([0, 1, 2, 3], [0, 1, 4, 9], 0.5)["method"]
+        gives "newton_forward".
+    """
+    x = np.sort(validate_nodes(x_nodes))
+    if len(x) != len(y_nodes):
+        raise ValueError("x_nodes and y_nodes must be the same length")
+
+    x_eval = np.asarray(x_eval, dtype=float)
+    point = float(np.mean(x_eval))  
+    n = len(x) - 1
+    extrapolating = bool(np.any((x_eval < x[0]) | (x_eval > x[-1])))
+
+    # check_equal_spacing raises an error if the gaps aren't equal
     try:
-        h = check_equal_spacing(xs, spacing_rtol) if xs.size >= 2 else None
+        h = check_equal_spacing(x, spacing_rtol)
+        equally_spaced = True
     except ValueError:
         h = None
-
-    equally = h is not None
+        equally_spaced = False
 
     if dydx_nodes is not None:
-        return {
-            "method": "hermite",
-            "reason": "derivative values f'(x_i) are supplied, so Hermite uses them",
-            "equally_spaced": equally,
-            "h": h,
-            "extrapolating": extrapolating,
-        }
-
-    if equally:
-        s = (xe - xs[0]) / h
-        if s <= n / 2 + 1e-12:
-            method, where = "newton_forward", "start"
+        method = "hermite"
+        reason = "derivative values are given, so Hermite can use them"
+    elif equally_spaced:
+        s = (point - x[0]) / h
+        if s <= n / 2:
+            method = "newton_forward"
+            reason = f"nodes equally spaced with h={h:g}; x_eval={point:g} is near the start of the table (s={s:g} of n={n})"
         else:
-            method, where = "newton_backward", "end"
-        reason = (
-            f"nodes equally spaced with h={h:g}; x_eval={xe:g} lies near the "
-            f"{where} of the table (s={s:g} of n={n})"
-        )
+            method = "newton_backward"
+            reason = f"nodes equally spaced with h={h:g}; x_eval={point:g} is near the end of the table (s={s:g} of n={n})"
     else:
         method = "lagrange"
-        reason = "nodes are not equally spaced, so only a general-purpose method applies"
+        reason = "nodes are not equally spaced, so Lagrange is used"
 
     return {
         "method": method,
         "reason": reason,
-        "equally_spaced": equally,
+        "equally_spaced": equally_spaced,
         "h": h,
         "extrapolating": extrapolating,
     }
 
 
 def interpolate(x_nodes, y_nodes, x_eval, dydx_nodes=None, degree=None, verbose=False):
+    """Pick a method with choose_method, then run it.
+
+    Parameters: same as choose_method, plus degree (only used by the Newton
+        formulas) and verbose (prints which method was picked and why).
+    Returns: the chosen method's result dict, plus method_used and decision.
+    Raises: whatever choose_method or the chosen method raises.
+    Example: interpolate([0, 1, 2, 3], [0, 1, 4, 9], 1.5)["value"] gives 2.25.
+    """
     decision = choose_method(x_nodes, y_nodes, x_eval, dydx_nodes)
     method = decision["method"]
 
     if verbose:
-        print(f"{method}: {decision['reason']}")
+        print(f"Using {method}: {decision['reason']}")
 
     if method == "hermite":
-        result = dict(hermite_interpolate(x_nodes, y_nodes, dydx_nodes, x_eval))
+        result = hermite_interpolate(x_nodes, y_nodes, dydx_nodes, x_eval)
     elif method == "newton_forward":
-        result = dict(newton_forward(x_nodes, y_nodes, x_eval, degree))
+        result = newton_forward(x_nodes, y_nodes, x_eval, degree)
     elif method == "newton_backward":
-        result = dict(newton_backward(x_nodes, y_nodes, x_eval, degree))
+        result = newton_backward(x_nodes, y_nodes, x_eval, degree)
     else:
-        val, extrap = lagrange_interpolate(x_eval, x_nodes, y_nodes)
-        is_scalar = np.asarray(x_eval).ndim == 0
-        result = {
-            "value": float(val) if is_scalar else val,
-            "degree": len(np.asarray(x_nodes)) - 1,
-            "extrapolating": bool(extrap),
-        }
+        result = lagrange_interpolate(x_nodes, y_nodes, x_eval)
 
     result["method_used"] = method
     result["decision"] = decision
@@ -83,8 +94,7 @@ def interpolate(x_nodes, y_nodes, x_eval, dydx_nodes=None, degree=None, verbose=
 
 
 if __name__ == "__main__":
-    import warnings
-
+    # Test cases T1-T7 from the assignment, with y = sin(x)
     cases = [
         ("T1", [0, 1, 2, 3, 4, 5], False, 0.4),
         ("T2", [0, 1, 2, 3, 4, 5], False, 4.7),
@@ -95,12 +105,13 @@ if __name__ == "__main__":
         ("T7", [0, 1, 2, 3, 4, 5], False, 6.5),
     ]
 
-    print(f"{'case':<5} {'method chosen':<16} {'value':>12} {'sin(x_eval)':>12} {'abs error':>11}")
-    for name, xn, use_d, xv in cases:
-        xn = np.array(xn, dtype=float)
-        d = np.cos(xn) if use_d else None
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            r = interpolate(xn, np.sin(xn), xv, dydx_nodes=d)
-        print(f"{name:<5} {r['method_used']:<16} {r['value']:>12.8f} {np.sin(xv):>12.8f} {abs(r['value'] - np.sin(xv)):>11.2e}")
-        print("      reason:", r["decision"]["reason"], "| extrapolating:", r["decision"]["extrapolating"])
+    warnings.simplefilter("ignore")
+
+    print(f"{'Case':<5} {'Method':<16} {'Value':>11} {'sin(x)':>11} {'Error':>10}")
+    for name, x, has_derivs, x_eval in cases:
+        x = np.array(x, dtype=float)
+        dydx = np.cos(x) if has_derivs else None
+        r = interpolate(x, np.sin(x), x_eval, dydx_nodes=dydx)
+        error = abs(r["value"] - np.sin(x_eval))
+        print(f"{name:<5} {r['method_used']:<16} {r['value']:>11.6f} {np.sin(x_eval):>11.6f} {error:>10.2e}")
+        print(f"      why: {r['decision']['reason']}")

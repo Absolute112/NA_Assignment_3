@@ -241,13 +241,4 @@ The error bound needs a bound on the derivative, which usually isn't known for r
 
 | Tool used | Part of assignment | What it helped with | % AI-assisted |
 |---|---|---|---|
-| Claude| report | Building the skeleton of the report | 60% |
-| Claude| report | Formatting the report to make it look cleaner | 40% |
-| Claude| lagrange | explained how Lagrange basis polynomials work, and why the sum of L_k(x) is 1 | 18% |
-| Claude| lagrange | debugging errors and understanding why somee warnings were popping up | 10% |
-| Claude| newton differences | understanding forward vs backward differences, and what s and t mean | 10% |
-| Claude| newton differences | understadning the base-node rule | 20% |
-| Claude| hermite | understanding doubled nodes | 20% |
-| Claude| hermite | understanding the exact H′ step and the results using the two error formulas | 20% |
-| Claude| applications | understanding how to make the figures | 30% |
-| Claude| interpolate | understanding sorting, extrapolation detection and the spacing tolerance | 30% |
+| chatgpt | start | understanding question and learning python concepts | |

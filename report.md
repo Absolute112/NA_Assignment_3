@@ -7,8 +7,8 @@
 | Abdul Ahad | 33478 | Problem 1 (lagrange.py), report |
 | Nayab Mahmood | 33427 | Problem 2 (newton_differences.py), report |
 | Emaan Shahbaz | 31777 | Problem 3 (hermite.py), report |
-| | | Problem 4 (interpolate.py), report |
-| | | Problem 5 Applications A, B, C and D, report |
+| Arham | 33459| Problem 4 (interpolate.py), report |
+|Rufile |33465 | Problem 5 Applications A, B, C and D, report |
 
 Each file can be run on its own with `python <filename>.py` and it prints the test cases for that problem. We only used numpy, matplotlib and sympy. Also everyy memeber played a part in the report, specifically corresponding to their problems they answered.
 

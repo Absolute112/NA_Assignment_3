@@ -18,17 +18,17 @@ To run: `python <filename>.py`. Each file runs its own test cases. Libraries use
 
 **(i) Kronecker property**
 
-L_k(x_j) gives a 4x4 matrix. Max deviation from the identity matrix: ____
+L_k(x_j) gives a 4x4 matrix. Max deviation from the identity matrix: 0.0000000000000000
 
-Max deviation of (sum of all L_k(x)) from 1 on a fine grid: ____
+Max deviation of (sum of all L_k(x)) from 1 on a fine grid: 6.661338147750939e-16
 
 Why the sum is always 1: if f(x) = 1, every y value is 1, so the interpolant is just the sum of the L_k(x). The constant 1 is a polynomial of degree 0, and the interpolating polynomial is unique, so the sum must equal 1 everywhere.
 
 **(ii) Exactness**
 
-f(x) = 2x^3 - x + 5, nodes used: ____
+f(x) = 2x^3 - x + 5, nodes used:[-1.0, -0.2, 0.4, 1.0]
 
-Max error: ____
+Max error: 3.552713678800501e-15
 
 Why it's exact: f is a cubic and 4 nodes give a unique polynomial of degree 3 or less, so the interpolant is f itself. The 4th derivative of f is 0, so the error formula gives 0. The only error left is round-off.
 
@@ -36,10 +36,10 @@ Why it's exact: f is a cubic and 4 nodes give a unique polynomial of degree 3 or
 
 | n | Equally spaced (max error) | Chebyshev (max error) |
 |---|---|---|
-| 5 | | |
-| 10 | | |
-| 15 | | |
-| 20 | | |
+| 5 | 0.43269231 | 0.55591134 |
+| 10 | 1.91564305 | 0.10915327 |
+| 15 | 2.10755185 | 0.08310705 |
+| 20 | 59.82230871 | 0.01533292 |
 
 ![Runge plot](figures/runge_n10.png)
 

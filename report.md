@@ -268,4 +268,4 @@ Tips: don't use too many points at once (high degree causes wiggles), and be car
 
 | Tool used | Part of assignment | What it helped with | % AI-assisted |
 |---|---|---|---|
-| | | | |
+| chatgpt | start | understanding question and learning python concepts | |

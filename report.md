@@ -7,8 +7,8 @@
 | Abdul Ahad | 33478 | Problem 1 (lagrange.py), report |
 | Nayab Mahmood | 33427 | Problem 2 (newton_differences.py), report |
 | Emaan Shahbaz | 31777 | Problem 3 (hermite.py), report |
-| | | Problem 4 (interpolate.py), report |
-| | | Problem 5 Applications A, B, C and D, report |
+| Arham Shah | 33459 | Problem 4 (interpolate.py), report |
+| Muhammad Rufile Wasim | 33465 | Problem 5 Applications A, B, C and D, report |
 
 Each file can be run on its own with `python <filename>.py` and it prints the test cases for that problem. We only used numpy, matplotlib and sympy. Also everyy memeber played a part in the report, specifically corresponding to their problems they answered.
 
@@ -250,4 +250,6 @@ The error bound needs a bound on the derivative, which usually isn't known for r
 | Claude| hermite | understanding doubled nodes | 20% |
 | Claude| hermite | understanding the exact H′ step and the results using the two error formulas | 20% |
 | Claude| applications | understanding how to make the figures | 30% |
+| Claude| applications | Help with debugging withh plots and also why warning labels keep popping up  | 32% |
 | Claude| interpolate | understanding sorting, extrapolation detection and the spacing tolerance | 30% |
+| Claude| interpolate | understanding T6, the tolerance being too tight or too loose, and why Hermite goes first | 27% |

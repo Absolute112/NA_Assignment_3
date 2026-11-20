@@ -4,7 +4,7 @@
 
 | Name | Roll No. | Part |
 |---|---|---|
-| | | Problem 1 (lagrange.py) |
+|Abdul Ahad |33478 | Problem 1 (lagrange.py) |
 |Nayab mahmood |33427 | Problem 2 (newton_differences.py) |
 |Emaan Shahbaz |31777 | Problem 3 (hermite.py) |
 | | | Problem 4 (interpolate.py), Applications A and B |
